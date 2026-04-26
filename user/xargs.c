@@ -63,7 +63,6 @@ int main(int argc,char*argv[]){
 
     //最后一行没有换行符，需要执行程序
     if(pa!=args){
-        *p='\0';
         *pa=0;//参数结束
         run(argv[1],argsbuf);
     }
