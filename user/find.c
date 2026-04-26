@@ -41,7 +41,7 @@ void find(char*path,char*target){
             }
             //构造路径"path/"
             strcpy(buf,path);
-            p=buf+strlen(buf);
+            p=buf+strlen(buf);//p用于指定路径末尾，处理修改,buf为路径指针
             *p++='/';
             //遍历目录项
             while(read(fd,&de,sizeof(de))==sizeof(de)){//读取到的目录项信息在de中
