@@ -59,7 +59,7 @@ void find(char*path,char*target){
 
                 //递归查找，排除.和..目录
                 if(strcmp(buf+strlen(buf)-1,".")!=0&&strcmp(buf+strlen(buf)-2,"..")!=0){
-                    find(buf,target);//递归查找子目录
+                    find(buf,target);//递归处理
                 }
             }
             break;
