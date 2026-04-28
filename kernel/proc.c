@@ -40,6 +40,7 @@ procinit(void)
       uint64 va = KSTACK((int) (p - proc));
       kvmmap(va, (uint64)pa, PGSIZE, PTE_R | PTE_W);
       p->kstack = va;
+      p->mask_sys_trace = 0;//初始化掩码
   }
   kvminithart();
 }
@@ -294,6 +295,8 @@ fork(void)
   pid = np->pid;
 
   np->state = RUNNABLE;
+
+  np->mask_sys_trace = p->mask_sys_trace;//子进程继承父进程跟踪掩码
 
   release(&np->lock);
 
