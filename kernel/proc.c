@@ -697,6 +697,7 @@ procdump(void)
   }
 }
 
+//获取可用进程数
 uint64 
 getprocnum(void){
   uint64 n=0;
