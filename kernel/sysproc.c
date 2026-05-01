@@ -115,6 +115,10 @@ sys_sysinfo(void)
   struct sysinfo info;
   info.freemem = getfreemem();
   info.nproc = getprocnum();
+  info.loadx1000 = load_avg_x1000;
+
+  //打印负载更新信息
+  printf("sysinfo: load updated: %d.%d\n",info.loadx1000/1000,info.loadx1000%1000);
 
   //获取用户虚拟地址
   uint64 addr;

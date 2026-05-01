@@ -21,6 +21,8 @@ static void freeproc(struct proc *p);
 
 extern char trampoline[]; // trampoline.S
 
+uint64 load_avg_x1000=0;//定义负载
+
 // initialize the proc table at boot time.
 void
 procinit(void)
@@ -710,4 +712,33 @@ getprocnum(void){
     release(&p->lock);
   }
   return n;
+}
+
+//获取可运行进程数
+uint64 
+getrunnableprocnum(void){
+  uint64 n = 0;
+  struct proc *p;
+  for(p = proc;p < &proc[NPROC];p++){
+    acquire(&p->lock);
+    if(p->state==RUNNABLE || p->state==RUNNING){
+      n++;
+    }
+    release(&p->lock);
+  }
+  return n;
+}
+
+//更新负载情况
+//指数加权移动平均：平均负载 = 上次平均 * 0.983 + 当前采样 * 0.017 （1分钟权重，结果放大x1000，因为xv6无浮点数）
+void
+update_load_avg(uint64 tick){
+  const uint64 sample_interval = 10;//采样间隔ms
+  static uint64 last_sample_tick=0;//上次采样
+
+  if(tick - last_sample_tick >= sample_interval){
+    last_sample_tick=tick;
+    uint64 runnable_count=getrunnableprocnum();
+    load_avg_x1000=(load_avg_x1000*59+runnable_count*1000)/60;
+  }
 }

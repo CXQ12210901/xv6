@@ -149,6 +149,11 @@ kerneltrap()
     panic("kerneltrap");
   }
 
+  //新增，时钟中断更新负载
+  if(which_dev==2){
+    update_load_avg(ticks);
+  }
+
   // give up the CPU if this is a timer interrupt.
   if(which_dev == 2 && myproc() != 0 && myproc()->state == RUNNING)
     yield();

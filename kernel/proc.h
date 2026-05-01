@@ -105,3 +105,6 @@ struct proc {
   char name[16];               // Process name (debugging)
   uint64 mask_sys_trace;       // 跟踪掩码
 };
+
+//关于附加功能计算负载
+extern uint64 load_avg_x1000;
