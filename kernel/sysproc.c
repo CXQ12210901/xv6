@@ -6,6 +6,7 @@
 #include "memlayout.h"
 #include "spinlock.h"
 #include "proc.h"
+#include "sysinfo.h"
 
 uint64
 sys_exit(void)
@@ -104,5 +105,23 @@ sys_trace(void)
 
   //设置进程跟踪掩码
   myproc()->mask_sys_trace = mask;
+  return 0;
+}
+
+uint64
+sys_sysinfo(void)
+{
+  //系统信息
+  struct sysinfo info;
+  info.freemem = getfreemem();
+  info.nproc = getprocnum();
+
+  //获取用户虚拟地址
+  uint64 addr;
+  argaddr(0,&addr);//参数零表示获取a0，a0 holds a pointer to the current process’s trapframe.
+
+  //将系统信息拷贝到用户空间
+  if(copyout(myproc()->pagetable,addr,(char*)&info,sizeof(info))<0)
+    return -1;
   return 0;
 }
